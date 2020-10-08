@@ -1,0 +1,17 @@
+{
+  "name": "send-job-alerts-to-crm",
+  "version": "0.0.0",
+  "main": "index.js",
+  "author": "C. Thomas Bailey (@noise_machines)",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^26.5.2",
+    "standard": "^14.3.4"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}
