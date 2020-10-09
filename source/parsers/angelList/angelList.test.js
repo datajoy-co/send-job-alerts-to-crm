@@ -2,8 +2,9 @@
 const parseAngelListJobAlerts = require('./angelList')
 let testEmails = require('./testEmails')
 
-const focusOn = null
-// const focusOn = 'October 5, 2020 at 10:58 am'
+// const focusOn = null
+const focusOn = 'October 5, 2020 at 10:58 am'
+// const focusOn = 'October 6, 2020 at 3:32 pm'
 
 function shouldFocusOn (testEmail) {
   return testEmail.name === focusOn

@@ -20,30 +20,37 @@ function parseEmail (html) {
 }
 
 function isListingContainer ($, element) {
-  const linkCount = countLinks($, element)
-  // console.log('Checking if element is a listing container.')
-  // console.log(`Found ${linkCount} links.`)
-  const contractCount = countContracts($, element)
-  // console.log(`Found ${contractCount} contracts.`)
-  return linkCount === 3 && contractCount === 1
+  const startupLogoCount = countStartupLogos($, element)
+  const separatorDotCount = countStringOccurrences($, element, '·')
+  const unsubscribeCount = countStringOccurrences($, element, 'unsubscribe')
+  return (
+    startupLogoCount === 1 && separatorDotCount >= 1 && unsubscribeCount === 0
+  )
 }
 
-function countLinks ($, element) {
-  return $(element).find('a').length
+function countStartupLogos ($, element) {
+  const startupLogos = $(element).find('img[src*="photos.angel.co/startups"]')
+  return startupLogos.length
 }
 
-function countContracts ($, element) {
+function countStringOccurrences ($, element, string) {
   const text = $(element).text()
-  const matches = text.match(/contract/gi)
+
+  const regex = new RegExp(string, 'gi')
+  const matches = text.match(regex)
 
   if (!matches) return 0
   return matches.length
 }
 
-function parseListingContainer ($, element) {
-  const companyName = parseCompanyName($, element)
+function parseListingContainer ($, jobListingContainer) {
+  const companyName = parseCompanyName($, jobListingContainer)
 
-  const { url, title } = parseUrlAndJobTitle($, companyName, element)
+  const { url, title } = parseUrlAndJobTitle(
+    $,
+    companyName,
+    jobListingContainer
+  )
 
   return {
     companyName,
@@ -52,38 +59,44 @@ function parseListingContainer ($, element) {
   }
 }
 
-function parseCompanyName ($, jobListingElement) {
-  const text = $(jobListingElement)
-    .text()
-    .trim()
+function parseCompanyName ($, jobListingContainer) {
+  const linksWithText = $(jobListingContainer)
+    .find('a')
+    .toArray()
+    .filter(containsText($))
 
-  // https://regexr.com/5ahb82
-  const regex = /^.*?(?= {2,})/
-  const matches = text.match(regex)
+  const firstLinkWithText = linksWithText[0]
+  const companyName = getText($, firstLinkWithText)
 
-  if (!matches) return null
-  return matches[0].trim()
+  return companyName
 }
 
-function isJobTitleLink ($, companyName) {
-  return function (link) {
-    const $link = $(link)
-    const text = $link.text().trim()
-    return text.length > 0 && text !== companyName
+function containsText ($) {
+  return function (element) {
+    const text = $(element).text()
+    return text.trim().length > 0
   }
 }
 
-function parseUrlAndJobTitle ($, companyName, element) {
-  const jobTitleLink = $(element)
+function parseUrlAndJobTitle ($, companyName, jobListingContainer) {
+  const jobTitleLink = $(jobListingContainer)
     .find('a')
     .toArray()
     .find(isJobTitleLink($, companyName))
 
   const $jobTitleLink = $(jobTitleLink)
+  const jobTitle = getText($, jobTitleLink)
 
   return {
     url: $jobTitleLink.attr('href'),
-    title: $jobTitleLink.text()
+    title: jobTitle
+  }
+}
+
+function isJobTitleLink ($, companyName) {
+  return function (link) {
+    const text = getText($, link)
+    return text.length > 0 && text !== companyName
   }
 }
 
@@ -94,4 +107,17 @@ function jobListingToCrmEntry (jobListing) {
     source: ['AngelList'],
     link: jobListing.url
   }
+}
+
+function getText ($, element) {
+  const text = $(element)
+    .text()
+    .trim()
+
+  return collapseSpaces(text)
+}
+
+function collapseSpaces (string) {
+  const twoOrMoreSpaces = /\s{2,}/gi
+  return string.replace(twoOrMoreSpaces, ' ')
 }
