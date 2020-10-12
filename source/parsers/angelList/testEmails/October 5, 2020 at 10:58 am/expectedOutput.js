@@ -42,6 +42,13 @@ module.exports = module.exports = [
     source: ['AngelList']
   },
   {
+    companyName: 'Minted',
+    link:
+      'http://links.angel.co/u/click?_t=26b4e8aeb47d4cd3acd5eba415f76f62&_m=2e71a0fe594b4e309b0f8c2f2eadd020&_e=1qzUnpK7KgEe3bAhu8IjzETmc0lJnbvdJlu8V1mEoF0xnSTqP_eamqA7RBxAYerASy1Ub6_U16D-Qbs7eNOgq1WLwePSIlLRFhBqQS6NGyPIDibq_3UJId5a3tFmHg7G-Coufld4vCKRNfWNDjAy_smuZVmHeiIhLNK877e6uODGP1JHAqjZlZQlCsQRXKw45pTchEnpm5VF5HNgdaM5j2LBYjMWnCu4MHuE2eJ5cAjWtdqDa500d9T6EPFPVFtAKnzrdbg1Panj9Yj9tPDhpqVlgWxKSkMpu4FU3PA7MO4f1ubkqCMGXFGDY5tej4uOZmYi4qv5TQCVhXjueCZeJcFdt8ARlsEPPmzB3TfVdD5-0PuclvzQJtjP1PB0gw9Cpztw8O7e5X0f-KtSOlKTTYpbV59NXckFrCAYSdoxOxsWvqLhPn3AqVgLlgIOaF2cMax_EQgMBZD5clTvEUjZO-6HfsyOHlbR1GhOQVb6yLAlJNsiWvhMtZ6V74SNaZdcMZwLTZOjB6d-8Xty9X0jZ-hDfV_09ScVYpvnqWJPUIU%3D',
+    name: 'Print Quality Specialist',
+    source: ['AngelList']
+  },
+  {
     companyName: 'Calendly',
     link:
       'http://links.angel.co/u/click?_t=26b4e8aeb47d4cd3acd5eba415f76f62&_m=2e71a0fe594b4e309b0f8c2f2eadd020&_e=1qzUnpK7KgEe3bAhu8IjzETmc0lJnbvdJlu8V1mEoF06-A2XxMUbIEU0Xwjmbd3aNs8RbSQmJyIqhXb9NA8uGXGVRZWx-5377b31XC2UqVGPnP438gMEZHuBN6BFdRoo5htblXc2jeLYjsy5XAyFYHYN8kwDtzBbjAHikM3oElHxqCcJVlj4vB0ksJX7RpemXuOOpGxs9Vi3tx8u1atZCJ1uul6RDjXCdB6SZjoCKXNYgf3bARLW3OijHF2Jz8brzJO960M0it3O9ZbHkbZGZfI8Qc-xDFu0P_VTaHTEOszRXteDyagYRDNZpGnDaTvJFGh8unR9R9oqX_M8JTuGkBKcayyv0mj9f-xywTMs0jWjuDPIIWn8jHpR5hhuGigaMKSqAd_DDam-TcEdbB12rCLY9-JED_qIaiFtnLxrl_I_p0PEygK9Dao90d_1RUrKAUKjO875oG-Qv0JhUYWX1KSEh2SY-cNqlTl0tFhktG04nlvTG7qLCxIkXp6kshUg',

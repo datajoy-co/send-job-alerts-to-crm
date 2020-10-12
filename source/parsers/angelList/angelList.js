@@ -9,23 +9,22 @@ function parseEmail (html) {
   const $ = cheerio.load(html)
   const jobListings = $('table')
     .toArray()
-    .filter(element => {
-      return isListingContainer($, element)
-    })
-    .map(element => {
-      return parseListingContainer($, element)
-    })
+    .filter(isListingContainer($))
+    .map(getJobListingsFromContainer($)) // This returns an array, so we'll flatten it next.
+    .flat()
 
   return jobListings
 }
 
 function isListingContainer ($, element) {
-  const startupLogoCount = countStartupLogos($, element)
-  const separatorDotCount = countStringOccurrences($, element, '·')
-  const unsubscribeCount = countStringOccurrences($, element, 'unsubscribe')
-  return (
-    startupLogoCount === 1 && separatorDotCount >= 1 && unsubscribeCount === 0
-  )
+  return function (element) {
+    const startupLogoCount = countStartupLogos($, element)
+    const separatorDotCount = countStringOccurrences($, element, '·')
+    const unsubscribeCount = countStringOccurrences($, element, 'unsubscribe')
+    return (
+      startupLogoCount === 1 && separatorDotCount >= 1 && unsubscribeCount === 0
+    )
+  }
 }
 
 function countStartupLogos ($, element) {
@@ -43,19 +42,13 @@ function countStringOccurrences ($, element, string) {
   return matches.length
 }
 
-function parseListingContainer ($, jobListingContainer) {
-  const companyName = parseCompanyName($, jobListingContainer)
+function getJobListingsFromContainer ($) {
+  return function (jobListingContainer) {
+    const companyName = parseCompanyName($, jobListingContainer)
 
-  const { url, title } = parseUrlAndJobTitle(
-    $,
-    companyName,
-    jobListingContainer
-  )
-
-  return {
-    companyName,
-    url,
-    title
+    return getJobTitleLinks($, companyName, jobListingContainer).map(
+      jobTitleLinkToJobListing(companyName)
+    )
   }
 }
 
@@ -71,6 +64,16 @@ function parseCompanyName ($, jobListingContainer) {
   return companyName
 }
 
+function jobTitleLinkToJobListing (companyName) {
+  return function (jobTitleLink) {
+    return {
+      companyName,
+      url: jobTitleLink.url,
+      title: jobTitleLink.title
+    }
+  }
+}
+
 function containsText ($) {
   return function (element) {
     const text = $(element).text()
@@ -78,25 +81,29 @@ function containsText ($) {
   }
 }
 
-function parseUrlAndJobTitle ($, companyName, jobListingContainer) {
-  const jobTitleLink = $(jobListingContainer)
+function getJobTitleLinks ($, companyName, jobListingContainer) {
+  return $(jobListingContainer)
     .find('a')
     .toArray()
-    .find(isJobTitleLink($, companyName))
-
-  const $jobTitleLink = $(jobTitleLink)
-  const jobTitle = getText($, jobTitleLink)
-
-  return {
-    url: $jobTitleLink.attr('href'),
-    title: jobTitle
-  }
+    .filter(isJobTitleLink($, companyName))
+    .map(parseJobTitleLink($))
 }
 
 function isJobTitleLink ($, companyName) {
   return function (link) {
     const text = getText($, link)
     return text.length > 0 && text !== companyName
+  }
+}
+
+function parseJobTitleLink ($) {
+  return function (jobTitleLink) {
+    const $jobTitleLink = $(jobTitleLink)
+    const jobTitle = getText($, jobTitleLink)
+    return {
+      url: $jobTitleLink.attr('href'),
+      title: jobTitle
+    }
   }
 }
 
